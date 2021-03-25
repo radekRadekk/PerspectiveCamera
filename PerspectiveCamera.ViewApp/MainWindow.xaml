@@ -1,0 +1,18 @@
+﻿<Window x:Class="PerspectiveCamera.ViewApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Perspective Camera" Height="600" Width="800" ResizeMode="NoResize">
+    <Grid>
+        <Button Height="50" Width="150" Margin="25,25,25,25" HorizontalAlignment="Left" VerticalAlignment="Top"
+                Background="Coral" x:Name="ResetButton" Click="ResetButton_OnClick">
+            Reset
+        </Button>
+        <TextBox Height="180" Width="150" Margin="25,100,25,25" HorizontalAlignment="Left" VerticalAlignment="Top"
+                 IsEnabled="False" x:Name="DescriptionTextBox" />
+        <Canvas Height="600" Width="600" x:Name="Canvas" Focusable="True" KeyDown="Canvas_OnKeyDown"
+                KeyUp="Canvas_OnKeyUp" ClipToBounds="True" />
+    </Grid>
+</Window>
