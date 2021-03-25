@@ -117,14 +117,7 @@ namespace PerspectiveCamera.ViewApp
 
         public static void RotateAx(double fi)
         {
-            var fiRad = (fi / 360) * 2 * Math.PI;
-            Matrix<double> rotationMatrix = DenseMatrix.OfArray(new[,]
-            {
-                {1, 0, 0, 0},
-                {0, Math.Cos(fiRad), -Math.Sin(fiRad), 0},
-                {0, Math.Sin(fiRad), Math.Cos(fiRad), 0},
-                {0, 0, 0, 1}
-            });
+            var rotationMatrix = RotationMatrices.GetAxRotationMatrix(fi);
 
             Points = Points.Select(p =>
             {
@@ -147,14 +140,7 @@ namespace PerspectiveCamera.ViewApp
 
         public static void RotateAy(double fi)
         {
-            var fiRad = (fi / 360) * 2 * Math.PI;
-            Matrix<double> rotationMatrix = DenseMatrix.OfArray(new[,]
-            {
-                {Math.Cos(fiRad), 0, Math.Sin(fiRad), 0},
-                {0, 1, 0, 0},
-                {-Math.Sin(fiRad), 0, Math.Cos(fiRad), 0},
-                {0, 0, 0, 1}
-            });
+            var rotationMatrix = RotationMatrices.GetAyRotationMatrix(fi);
 
             Points = Points.Select(p =>
             {
@@ -177,14 +163,7 @@ namespace PerspectiveCamera.ViewApp
 
         public static void RotateAz(double fi)
         {
-            var fiRad = (fi / 360) * 2 * Math.PI;
-            Matrix<double> rotationMatrix = DenseMatrix.OfArray(new[,]
-            {
-                {Math.Cos(fiRad), -Math.Sin(fiRad), 0, 0},
-                {Math.Sin(fiRad), Math.Cos(fiRad), 0, 0},
-                {0, 0, 1, 0},
-                {0, 0, 0, 1}
-            });
+            var rotationMatrix = RotationMatrices.GetAzRotationMatrix(fi);
 
             Points = Points.Select(p =>
             {
