@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using MathNet.Numerics.LinearAlgebra;
 using PerspectiveCamera.ViewApp.Elements;
+using PerspectiveCamera.ViewApp.Helpers;
 
 namespace PerspectiveCamera.ViewApp
 {
     public class CameraState
     {
-        public PerspectiveCameraProperties Properties { get; private init; }
+        private PerspectiveCameraProperties Properties { get; init; }
         public List<Point> Points { get; private init; }
         public List<Connection> Connections { get; private init; }
 
@@ -14,7 +15,93 @@ namespace PerspectiveCamera.ViewApp
         {
         }
 
-        public void Move(double deltaX = 0, double deltaY = 0, double deltaZ = 0)
+        public List<( int Id, double X, double Y)> GetPointsForDrawing()
+        {
+            var pointsForDrawing = new List<( int Id, double X, double Y)>();
+
+            foreach (var point in Points)
+            {
+                var pointForDrawing = point.GetPointForDrawing(Properties.Near, Properties.Far, Properties.Fov);
+                pointsForDrawing.Add((point.Id, pointForDrawing.X, pointForDrawing.Y));
+            }
+
+            return pointsForDrawing;
+        }
+
+        public void HandleControl(KeysState keysState)
+        {
+            if (keysState.W)
+            {
+                Move(deltaZ: Constants.CoordinateDelta);
+            }
+
+            if (keysState.S)
+            {
+                Move(deltaZ: -Constants.CoordinateDelta);
+            }
+
+            if (keysState.A)
+            {
+                Move(deltaX: Constants.CoordinateDelta);
+            }
+
+            if (keysState.D)
+            {
+                Move(deltaX: -Constants.CoordinateDelta);
+            }
+
+            if (keysState.Q)
+            {
+                Move(deltaY: Constants.CoordinateDelta);
+            }
+
+            if (keysState.E)
+            {
+                Move(deltaY: -Constants.CoordinateDelta);
+            }
+
+            if (keysState.R)
+            {
+                Properties.Fov += Constants.ZoomDelta;
+            }
+
+            if (keysState.F)
+            {
+                Properties.Fov -= Constants.ZoomDelta;
+            }
+
+            if (keysState.I)
+            {
+                RotateAx(Constants.FiDelta);
+            }
+
+            if (keysState.K)
+            {
+                RotateAx(-Constants.FiDelta);
+            }
+
+            if (keysState.J)
+            {
+                RotateAy(Constants.FiDelta);
+            }
+
+            if (keysState.L)
+            {
+                RotateAy(-Constants.FiDelta);
+            }
+
+            if (keysState.U)
+            {
+                RotateAz(Constants.FiDelta);
+            }
+
+            if (keysState.O)
+            {
+                RotateAz(-Constants.FiDelta);
+            }
+        }
+
+        private void Move(double deltaX = 0, double deltaY = 0, double deltaZ = 0)
         {
             foreach (var point in Points)
             {
@@ -24,19 +111,19 @@ namespace PerspectiveCamera.ViewApp
             }
         }
 
-        public void RotateAx(double fi)
+        private void RotateAx(double fi)
         {
-            Rotate(RotationMatrices.GetAxRotationMatrix(fi));
+            Rotate(Matrices.GetAxRotationMatrix(fi));
         }
 
-        public void RotateAy(double fi)
+        private void RotateAy(double fi)
         {
-            Rotate(RotationMatrices.GetAyRotationMatrix(fi));
+            Rotate(Matrices.GetAyRotationMatrix(fi));
         }
 
-        public void RotateAz(double fi)
+        private void RotateAz(double fi)
         {
-            Rotate(RotationMatrices.GetAzRotationMatrix(fi));
+            Rotate(Matrices.GetAzRotationMatrix(fi));
         }
 
         private void Rotate(Matrix<double> rotationMatrix)
@@ -70,5 +157,14 @@ namespace PerspectiveCamera.ViewApp
                 Connections = connections
             };
         }
+    }
+
+    public class PerspectiveCameraProperties
+    {
+        public double Near { get; init; }
+        public double Far { get; init; }
+        public double Fov { get; set; }
+        public double CanvasWidth { get; init; }
+        public double CanvasHeight { get; init; }
     }
 }
