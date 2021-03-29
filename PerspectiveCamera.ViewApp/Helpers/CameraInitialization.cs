@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Media;
 using PerspectiveCamera.ViewApp.Elements;
 
 namespace PerspectiveCamera.ViewApp.Helpers
@@ -151,6 +152,30 @@ namespace PerspectiveCamera.ViewApp.Helpers
                 new Connection(20, 24)
             };
 
+            var planes = new List<Plane>
+            {
+                new Plane(Brushes.Aqua, 1, 2, 3, 4),
+                new Plane(Brushes.Chartreuse, 5, 6, 7, 8),
+                new Plane(Brushes.Gold, 1, 2, 6, 5),
+                new Plane(Brushes.Fuchsia, 3, 4, 8, 7),
+                new Plane(Brushes.BlueViolet, 1, 4, 8, 5),
+                new Plane(Brushes.SaddleBrown, 2, 3, 7, 6),
+
+                new Plane(Brushes.Aqua, 9, 10, 11, 12),
+                new Plane(Brushes.Chartreuse, 13, 14, 15, 16),
+                new Plane(Brushes.Gold, 9, 10, 14, 13),
+                new Plane(Brushes.Fuchsia, 11, 12, 16, 15),
+                new Plane(Brushes.BlueViolet, 9, 12, 16, 13),
+                new Plane(Brushes.SaddleBrown, 10, 11, 15, 14),
+
+                new Plane(Brushes.Aqua, 17, 18, 19, 20),
+                new Plane(Brushes.Chartreuse, 21, 22, 23, 24),
+                new Plane(Brushes.Gold, 17, 18, 22, 21),
+                new Plane(Brushes.Fuchsia, 19, 20, 24, 23),
+                new Plane(Brushes.BlueViolet, 17, 20, 24, 21),
+                new Plane(Brushes.SaddleBrown, 18, 19, 23, 22),
+            };
+
             return CameraState.CreateCameraState(
                 defaultNear,
                 defaultFar,
@@ -158,7 +183,8 @@ namespace PerspectiveCamera.ViewApp.Helpers
                 Constants.CanvasWidth,
                 Constants.CanvasHeight,
                 points,
-                connections);
+                connections,
+                planes);
         }
     }
 }

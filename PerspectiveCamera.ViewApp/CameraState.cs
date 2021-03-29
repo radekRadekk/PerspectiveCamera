@@ -11,6 +11,8 @@ namespace PerspectiveCamera.ViewApp
         public List<Point> Points { get; private init; }
         public List<Connection> Connections { get; private init; }
 
+        public List<Plane> Planes { get; private init; }
+
         private CameraState()
         {
         }
@@ -141,7 +143,7 @@ namespace PerspectiveCamera.ViewApp
 
         public static CameraState CreateCameraState(double near, double far, double fov,
             double canvasWidth, double canvasHeight,
-            List<Point> points, List<Connection> connections)
+            List<Point> points, List<Connection> connections, List<Plane> planes)
         {
             return new CameraState
             {
@@ -154,7 +156,8 @@ namespace PerspectiveCamera.ViewApp
                     CanvasHeight = canvasHeight
                 },
                 Points = points,
-                Connections = connections
+                Connections = connections,
+                Planes = planes
             };
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -13,7 +14,11 @@ namespace PerspectiveCamera.ViewApp.Extensions
 
             var pointsForDrawing = cameraState.GetPointsForDrawing();
 
-            foreach (var connection in cameraState.Connections)
+            var orderedConnections = cameraState.Connections
+                .OrderBy(p => p.GetDistanceFromCoordinateSystemOrigin(cameraState.Points))
+                .Reverse()
+                .ToList();
+            foreach (var connection in orderedConnections)
             {
                 var line = new Line();
                 line.X1 = pointsForDrawing.First(p => p.Id == connection.Point1Id).X;
@@ -24,6 +29,26 @@ namespace PerspectiveCamera.ViewApp.Extensions
                 line.Stroke = Brushes.Black;
 
                 canvas.Children.Add(line);
+            }
+
+            var orderedPlanes = cameraState.Planes
+                .OrderBy(p => p.GetDistanceFromCoordinateSystemOrigin(cameraState.Points))
+                .Reverse()
+                .ToList();
+            foreach (var plane in orderedPlanes)
+            {
+                var polygon = new Polygon();
+                foreach (var pointId in plane.PointIds)
+                {
+                    polygon.Points.Add(
+                        new Point(
+                            pointsForDrawing.First(p => p.Id == pointId).X,
+                            pointsForDrawing.First(p => p.Id == pointId).Y)
+                    );
+                }
+
+                polygon.Fill = plane.Color;
+                canvas.Children.Add(polygon);
             }
         }
     }
