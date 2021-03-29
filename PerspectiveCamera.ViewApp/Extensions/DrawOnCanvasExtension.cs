@@ -1,8 +1,9 @@
-﻿using System.Linq;
-using System.Windows;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using PerspectiveCamera.ViewApp.Elements;
 
 namespace PerspectiveCamera.ViewApp.Extensions
 {
@@ -14,42 +15,57 @@ namespace PerspectiveCamera.ViewApp.Extensions
 
             var pointsForDrawing = cameraState.GetPointsForDrawing();
 
-            var orderedConnections = cameraState.Connections
-                .OrderBy(p => p.GetDistanceFromCoordinateSystemOrigin(cameraState.Points))
+            var elements = new List<IGetDistanceFromCoordinateSystemOrigin>()
+                .Concat(cameraState.Connections)
+                .Concat(cameraState.Planes)
+                .OrderBy(e => e.GetDistanceFromCoordinateSystemOrigin(cameraState.Points))
                 .Reverse()
                 .ToList();
-            foreach (var connection in orderedConnections)
-            {
-                var line = new Line();
-                line.X1 = pointsForDrawing.First(p => p.Id == connection.Point1Id).X;
-                line.Y1 = pointsForDrawing.First(p => p.Id == connection.Point1Id).Y;
-                line.X2 = pointsForDrawing.First(p => p.Id == connection.Point2Id).X;
-                line.Y2 = pointsForDrawing.First(p => p.Id == connection.Point2Id).Y;
-                line.StrokeThickness = 2;
-                line.Stroke = Brushes.Black;
 
-                canvas.Children.Add(line);
-            }
-
-            var orderedPlanes = cameraState.Planes
-                .OrderBy(p => p.GetDistanceFromCoordinateSystemOrigin(cameraState.Points))
-                .Reverse()
-                .ToList();
-            foreach (var plane in orderedPlanes)
+            foreach (var element in elements)
             {
-                var polygon = new Polygon();
-                foreach (var pointId in plane.PointIds)
+                switch (element)
                 {
-                    polygon.Points.Add(
-                        new Point(
-                            pointsForDrawing.First(p => p.Id == pointId).X,
-                            pointsForDrawing.First(p => p.Id == pointId).Y)
-                    );
+                    case Connection connection:
+                        var line = CreateLine(connection, pointsForDrawing);
+                        canvas.Children.Add(line);
+                        break;
+                    case Plane plane:
+                        var polygon = CreatePolygon(plane, pointsForDrawing);
+                        canvas.Children.Add(polygon);
+                        break;
                 }
-
-                polygon.Fill = plane.Color;
-                canvas.Children.Add(polygon);
             }
+        }
+
+        private static Line CreateLine(Connection connection, List<(int Id, double X, double Y)> pointsForDrawing)
+        {
+            var line = new Line();
+            line.X1 = pointsForDrawing.First(p => p.Id == connection.Point1Id).X;
+            line.Y1 = pointsForDrawing.First(p => p.Id == connection.Point1Id).Y;
+            line.X2 = pointsForDrawing.First(p => p.Id == connection.Point2Id).X;
+            line.Y2 = pointsForDrawing.First(p => p.Id == connection.Point2Id).Y;
+            line.StrokeThickness = 2;
+            line.Stroke = Brushes.Black;
+
+            return line;
+        }
+
+        private static Polygon CreatePolygon(Plane plane, List<(int Id, double X, double Y)> pointsForDrawing)
+        {
+            var polygon = new Polygon();
+            foreach (var pointId in plane.PointIds)
+            {
+                polygon.Points.Add(
+                    new System.Windows.Point(
+                        pointsForDrawing.First(p => p.Id == pointId).X,
+                        pointsForDrawing.First(p => p.Id == pointId).Y)
+                );
+            }
+
+            polygon.Fill = plane.Color;
+
+            return polygon;
         }
     }
 }

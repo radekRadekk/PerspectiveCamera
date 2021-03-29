@@ -5,7 +5,7 @@ using System.Windows.Media;
 
 namespace PerspectiveCamera.ViewApp.Elements
 {
-    public readonly struct Plane : IGetDistanceFromCoordinateSystemOrigin
+    public class Plane : IGetDistanceFromCoordinateSystemOrigin
     {
         public List<int> PointIds { get; }
         public Brush Color { get; }
