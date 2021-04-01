@@ -9,13 +9,13 @@ namespace PerspectiveCamera.ViewApp.Extensions
 {
     public static class DrawOnCanvasExtension
     {
-        public static void Draw(this Canvas canvas, CameraState cameraState)
+        public static void DrawWithPainterAlgorithm(this Canvas canvas, CameraState cameraState)
         {
             canvas.Children.Clear();
 
             var pointsForDrawing = cameraState.GetPointsForDrawing();
 
-            var elements = new List<IGetDistanceFromCoordinateSystemOrigin>()
+            var elements = new List<IElement>()
                 .Concat(cameraState.Connections)
                 .Concat(cameraState.Planes)
                 .OrderBy(e => e.GetDistanceFromCoordinateSystemOrigin(cameraState.Points))

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace PerspectiveCamera.ViewApp.Elements
 {
-    public class Connection : IGetDistanceFromCoordinateSystemOrigin
+    public class Connection : IElement
     {
         public int Point1Id { get; }
         public int Point2Id { get; }

@@ -2,7 +2,7 @@
 
 namespace PerspectiveCamera.ViewApp.Elements
 {
-    public interface IGetDistanceFromCoordinateSystemOrigin
+    public interface IElement
     {
         public double GetDistanceFromCoordinateSystemOrigin(List<Point> points);
     }

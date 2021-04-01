@@ -46,7 +46,7 @@ namespace PerspectiveCamera.ViewApp
         private void TimerEvent(object sender, EventArgs e)
         {
             _cameraState.HandleControl(_keysState);
-            Canvas.Draw(_cameraState);
+            Canvas.DrawWithPainterAlgorithm(_cameraState);
         }
 
         private void Canvas_OnKeyDown(object sender, KeyEventArgs e)
@@ -63,7 +63,7 @@ namespace PerspectiveCamera.ViewApp
         {
             _cameraState = CameraInitialization.DefaultWithThreeCubes();
             _keysState.SetDefault();
-            Canvas.Draw(_cameraState);
+            Canvas.DrawWithPainterAlgorithm(_cameraState);
             Canvas.Focus();
         }
     }
